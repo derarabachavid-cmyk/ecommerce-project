@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
 from .views import (
@@ -9,7 +9,6 @@ from .views import (
     create_order,
     my_orders,
 )
-
 
 router = DefaultRouter()
 
@@ -25,30 +24,10 @@ router.register(
     basename="category",
 )
 
-
-urlpatterns = router.urls + [
-
-    path(
-        "register/",
-        register,
-        name="register",
-    ),
-
-    path(
-        "login/",
-        login,
-        name="login",
-    ),
-
-    path(
-        "orders/create/",
-        create_order,
-        name="create-order",
-    ),
-
-    path(
-        "orders/",
-        my_orders,
-        name="my-orders",
-    ),
+urlpatterns = [
+    path("", include(router.urls)),
+    path("register/", register, name="register"),
+    path("login/", login, name="login"),
+    path("orders/create/", create_order, name="create-order"),
+    path("orders/", my_orders, name="my-orders"),
 ]
