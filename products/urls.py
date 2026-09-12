@@ -4,34 +4,51 @@ from rest_framework.routers import DefaultRouter
 from .views import (
     ProductViewSet,
     CategoryViewSet,
-    OrderCreateView,
-    MyOrdersView,
-    RegisterView,
+    register,
+    login,
+    create_order,
+    my_orders,
 )
 
 
 router = DefaultRouter()
 
-router.register("products", ProductViewSet, basename="product")
-router.register("categories", CategoryViewSet, basename="category")
+router.register(
+    "products",
+    ProductViewSet,
+    basename="product",
+)
+
+router.register(
+    "categories",
+    CategoryViewSet,
+    basename="category",
+)
 
 
 urlpatterns = router.urls + [
+
     path(
-        "orders/",
-        OrderCreateView.as_view(),
+        "register/",
+        register,
+        name="register",
+    ),
+
+    path(
+        "login/",
+        login,
+        name="login",
+    ),
+
+    path(
+        "orders/create/",
+        create_order,
         name="create-order",
     ),
 
     path(
-        "my-orders/",
-        MyOrdersView.as_view(),
+        "orders/",
+        my_orders,
         name="my-orders",
-    ),
-
-    path(
-        "register/",
-        RegisterView.as_view(),
-        name="register",
     ),
 ]
