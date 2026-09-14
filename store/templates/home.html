@@ -1,0 +1,650 @@
+{% extends "base.html" %}
+
+{% block title %}
+E-Commerce | Home
+{% endblock %}
+
+{% block content %}
+
+<style>
+/* =========================
+   HOME PAGE
+========================= */
+
+.home-page {
+    background: #f4f7fb;
+}
+
+/* HERO */
+.hero {
+    max-width: 1200px;
+    margin: 35px auto 55px;
+    padding: 70px 60px;
+    border-radius: 28px;
+    background: linear-gradient(135deg, #062b4f, #0b63ce);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+    box-shadow: 0 20px 50px rgba(6, 43, 79, .20);
+}
+
+.hero-text {
+    max-width: 650px;
+}
+
+.hero-label {
+    color: #8fd3ff;
+    font-size: 15px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 15px;
+}
+
+.hero h1 {
+    font-size: 52px;
+    line-height: 1.1;
+    margin: 0 0 20px;
+    font-weight: 900;
+}
+
+.hero p {
+    font-size: 19px;
+    line-height: 1.7;
+    color: #e5f2ff;
+    margin-bottom: 30px;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.hero-btn {
+    display: inline-block;
+    padding: 14px 25px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 800;
+    transition: .2s;
+}
+
+.hero-btn-primary {
+    background: white;
+    color: #086ee8;
+}
+
+.hero-btn-secondary {
+    border: 2px solid rgba(255,255,255,.5);
+    color: white;
+}
+
+.hero-btn:hover {
+    transform: translateY(-3px);
+}
+
+/* HERO ICON */
+.hero-icon {
+    width: 190px;
+    height: 190px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 90px;
+    flex-shrink: 0;
+}
+
+/* SECTION */
+.home-section {
+    max-width: 1200px;
+    margin: 0 auto 65px;
+}
+
+.section-heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    margin-bottom: 25px;
+}
+
+.section-heading h2 {
+    margin: 0;
+    font-size: 32px;
+    color: #082f56;
+    font-weight: 900;
+}
+
+.section-heading p {
+    margin: 7px 0 0;
+    color: #64748b;
+}
+
+.view-all {
+    color: #0878ee;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+/* CATEGORIES */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.category-card {
+    min-height: 190px;
+    padding: 28px;
+    border-radius: 20px;
+    background: white;
+    border: 1px solid #e2e8f0;
+    text-decoration: none;
+    color: #082f56;
+    box-shadow: 0 8px 25px rgba(15, 23, 42, .07);
+    transition: .25s;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.category-card:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 18px 35px rgba(15, 23, 42, .13);
+    border-color: #1683f7;
+}
+
+.category-icon {
+    width: 65px;
+    height: 65px;
+    border-radius: 17px;
+    background: #edf6ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 34px;
+}
+
+.category-card h3 {
+    margin: 20px 0 5px;
+    font-size: 21px;
+}
+
+.category-link {
+    color: #0878ee;
+    font-weight: 700;
+}
+
+/* PRODUCTS */
+.home-product-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px;
+}
+
+.home-product-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 8px 25px rgba(15, 23, 42, .07);
+    transition: .25s;
+}
+
+.home-product-card:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 18px 40px rgba(15, 23, 42, .14);
+}
+
+.home-product-image {
+    height: 230px;
+    background: #f8fafc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.home-product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.home-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #eaf4ff, #f8fbff);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #0b63ce;
+}
+
+.home-placeholder span {
+    font-size: 65px;
+}
+
+.home-placeholder small {
+    margin-top: 8px;
+    font-weight: 700;
+    color: #64748b;
+}
+
+.home-product-info {
+    padding: 20px;
+}
+
+.home-product-category {
+    color: #0878ee;
+    font-size: 13px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.home-product-info h3 {
+    color: #082f56;
+    font-size: 19px;
+    margin: 8px 0;
+}
+
+.home-product-info p {
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.5;
+    min-height: 42px;
+}
+
+.home-product-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.home-price {
+    color: #0878ee;
+    font-size: 21px;
+    font-weight: 900;
+}
+
+.home-details {
+    background: #0878ee;
+    color: white;
+    padding: 10px 14px;
+    border-radius: 9px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 13px;
+}
+
+/* BENEFITS */
+.benefits {
+    max-width: 1200px;
+    margin: 0 auto 70px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.benefit {
+    background: white;
+    padding: 25px;
+    border-radius: 18px;
+    border: 1px solid #e2e8f0;
+    text-align: center;
+}
+
+.benefit-icon {
+    font-size: 35px;
+    margin-bottom: 10px;
+}
+
+.benefit h3 {
+    margin: 5px 0;
+    color: #082f56;
+}
+
+.benefit p {
+    color: #64748b;
+    margin: 0;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1000px) {
+    .category-grid,
+    .home-product-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .hero {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+
+    .home-section,
+    .benefits {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+}
+
+@media (max-width: 650px) {
+    .hero {
+        padding: 40px 25px;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .hero h1 {
+        font-size: 38px;
+    }
+
+    .hero-buttons {
+        justify-content: center;
+    }
+
+    .hero-icon {
+        width: 130px;
+        height: 130px;
+        font-size: 60px;
+    }
+
+    .category-grid,
+    .home-product-grid,
+    .benefits {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+
+
+<div class="home-page">
+
+    <!-- =========================
+         HERO
+    ========================== -->
+
+    <section class="hero">
+
+        <div class="hero-text">
+
+            <div class="hero-label">
+                Welcome to our store
+            </div>
+
+            <h1>
+                Shop Smart.<br>
+                Live Better.
+            </h1>
+
+            <p>
+                Discover quality products, great prices and a simple
+                shopping experience all in one place.
+            </p>
+
+            <div class="hero-buttons">
+
+                <a href="{% url 'product_list' %}"
+                   class="hero-btn hero-btn-primary">
+                    🛍️ Shop Products
+                </a>
+
+                <a href="{% url 'cart' %}"
+                   class="hero-btn hero-btn-secondary">
+                    🛒 View Cart
+                </a>
+
+            </div>
+
+        </div>
+
+        <div class="hero-icon">
+            🛒
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         CATEGORIES
+    ========================== -->
+
+    <section class="home-section">
+
+        <div class="section-heading">
+
+            <div>
+                <h2>Shop by Category</h2>
+                <p>Find products that match your needs.</p>
+            </div>
+
+            <a href="{% url 'product_list' %}" class="view-all">
+                View All →
+            </a>
+
+        </div>
+
+
+        <div class="category-grid">
+
+            {% for category in categories %}
+
+                <a href="{% url 'category_products' category.id %}"
+                   class="category-card">
+
+                    <div>
+
+                        <div class="category-icon">
+
+                            {% if category.name == "Electronics" %}
+                                🎧
+                            {% elif category.name == "Fashion" %}
+                                👕
+                            {% elif category.name == "Home" %}
+                                🏠
+                            {% elif category.name == "Accessories" %}
+                                👜
+                            {% else %}
+                                🛍️
+                            {% endif %}
+
+                        </div>
+
+                        <h3>
+                            {{ category.name }}
+                        </h3>
+
+                    </div>
+
+                    <div class="category-link">
+                        Explore collection →
+                    </div>
+
+                </a>
+
+            {% empty %}
+
+                <p>No categories available.</p>
+
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         FEATURED PRODUCTS
+    ========================== -->
+
+    <section class="home-section">
+
+        <div class="section-heading">
+
+            <div>
+                <h2>Featured Products</h2>
+                <p>Popular products from our store.</p>
+            </div>
+
+            <a href="{% url 'product_list' %}" class="view-all">
+                View All →
+            </a>
+
+        </div>
+
+
+        <div class="home-product-grid">
+
+            {% for product in featured_products %}
+
+                <article class="home-product-card">
+
+                    <a href="{% url 'product_detail' product.id %}">
+
+                        <div class="home-product-image">
+
+                            {% if product.image %}
+                                <img
+                                    src="{{ product.image.url }}"
+                                    alt="{{ product.name }}"
+                                >
+                            {% else %}
+
+                                <div class="home-placeholder">
+
+                                    {% if product.category.name == "Electronics" %}
+                                        <span>🎧</span>
+                                    {% elif product.category.name == "Fashion" %}
+                                        <span>👕</span>
+                                    {% elif product.category.name == "Home" %}
+                                        <span>🏠</span>
+                                    {% elif product.category.name == "Accessories" %}
+                                        <span>👜</span>
+                                    {% elif "Coffee Maker" in product.name %}
+                                        <span>☕</span>
+                                    {% elif "Watch" in product.name %}
+                                        <span>⌚</span>
+                                    {% elif "Keyboard" in product.name %}
+                                        <span>⌨️</span>
+                                    {% elif "Mouse" in product.name %}
+                                        <span>🖱️</span>
+                                    {% elif "Speaker" in product.name %}
+                                        <span>🔊</span>
+                                    {% else %}
+                                        <span>🛍️</span>
+                                    {% endif %}
+
+                                    <small>Product image</small>
+
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+                    </a>
+
+
+                    <div class="home-product-info">
+
+                        <div class="home-product-category">
+                            {% if product.category %}
+                                {{ product.category.name }}
+                            {% else %}
+                                Product
+                            {% endif %}
+                        </div>
+
+                        <h3>
+                            {{ product.name }}
+                        </h3>
+
+                        <p>
+                            {{ product.description|truncatewords:12 }}
+                        </p>
+
+                        <div class="home-product-bottom">
+
+                            <div class="home-price">
+                                ${{ product.price }}
+                            </div>
+
+                            <a href="{% url 'product_detail' product.id %}"
+                               class="home-details">
+                                Details
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+            {% empty %}
+
+                <p>No products available yet.</p>
+
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         BENEFITS
+    ========================== -->
+
+    <section class="benefits">
+
+        <div class="benefit">
+
+            <div class="benefit-icon">🚚</div>
+
+            <h3>Fast Delivery</h3>
+
+            <p>
+                Get your products delivered conveniently.
+            </p>
+
+        </div>
+
+
+        <div class="benefit">
+
+            <div class="benefit-icon">🔒</div>
+
+            <h3>Secure Shopping</h3>
+
+            <p>
+                Your account and orders are handled securely.
+            </p>
+
+        </div>
+
+
+        <div class="benefit">
+
+            <div class="benefit-icon">⭐</div>
+
+            <h3>Quality Products</h3>
+
+            <p>
+                Browse products selected for everyday needs.
+            </p>
+
+        </div>
+
+    </section>
+
+</div>
+
+{% endblock %}

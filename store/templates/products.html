@@ -1,0 +1,359 @@
+{% extends "base.html" %}
+
+{% block title %}Products{% endblock %}
+
+{% block content %}
+
+<div class="products-page">
+
+    <!-- BREADCRUMB -->
+    <div class="breadcrumb">
+        <a href="{% url 'home' %}">Home</a>
+        <span>›</span>
+        <strong>Products</strong>
+    </div>
+
+
+    <!-- PAGE HEADER -->
+    <div class="products-header">
+
+        <div>
+            <span class="products-label">OUR COLLECTION</span>
+
+            {% if category %}
+                <h1>{{ category.name }}</h1>
+                <p>{{ category.description }}</p>
+            {% else %}
+                <h1>All Products</h1>
+                <p>Discover our latest products and best deals.</p>
+            {% endif %}
+        </div>
+
+    </div>
+
+
+    <!-- SEARCH -->
+    <div class="products-toolbar">
+
+        <form
+            method="GET"
+            action="{% url 'product_list' %}"
+            class="product-search"
+        >
+
+            <input
+                type="text"
+                name="q"
+                value="{{ query }}"
+                placeholder="Search products..."
+            >
+
+            <button type="submit">
+                Search
+            </button>
+
+        </form>
+
+
+        <!-- CATEGORIES -->
+        <div class="category-links">
+
+            <a
+                href="{% url 'product_list' %}"
+                class="{% if not selected_category %}active{% endif %}"
+            >
+                All
+            </a>
+
+            {% for cat in categories %}
+
+                <a
+                    href="{% url 'category_products' cat.id %}"
+                    class="{% if selected_category == cat.id|stringformat:'s' %}active{% endif %}"
+                >
+                    {{ cat.name }}
+                </a>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+
+    <!-- SEARCH RESULT MESSAGE -->
+    {% if query %}
+
+        <div class="search-message">
+            Search results for:
+            <strong>"{{ query }}"</strong>
+        </div>
+
+    {% endif %}
+
+
+    {% if products %}
+
+        <!-- PRODUCTS GRID -->
+        <div class="product-grid">
+
+            {% for product in products %}
+
+                <article class="product-card">
+
+                    <!-- PRODUCT IMAGE -->
+                    <a
+                        href="{% url 'product_detail' product.id %}"
+                        class="product-image"
+                    >
+
+                        {% if product.image %}
+
+                            <!-- REAL UPLOADED IMAGE -->
+                            <img
+                                src="{{ product.image.url }}"
+                                alt="{{ product.name }}"
+                            >
+
+                        {% else %}
+
+                            <!-- FALLBACK PLACEHOLDER -->
+                            <div class="product-image-placeholder">
+
+                                {% if product.category and product.category.name == "Electronics" %}
+
+                                    <span>🎧</span>
+
+                                {% elif product.category and product.category.name == "Fashion" %}
+
+                                    <span>👕</span>
+
+                                {% elif product.category and product.category.name == "Home" %}
+
+                                    <span>🏠</span>
+
+                                {% elif product.category and product.category.name == "Accessories" %}
+
+                                    <span>👜</span>
+
+                                {% elif "Headphones" in product.name %}
+
+                                    <span>🎧</span>
+
+                                {% elif "Watch" in product.name %}
+
+                                    <span>⌚</span>
+
+                                {% elif "Speaker" in product.name %}
+
+                                    <span>🔊</span>
+
+                                {% elif "Mouse" in product.name %}
+
+                                    <span>🖱️</span>
+
+                                {% elif "Keyboard" in product.name %}
+
+                                    <span>⌨️</span>
+
+                                {% elif "Sneakers" in product.name %}
+
+                                    <span>👟</span>
+
+                                {% elif "Hoodie" in product.name %}
+
+                                    <span>👕</span>
+
+                                {% elif "Backpack" in product.name %}
+
+                                    <span>🎒</span>
+
+                                {% elif "Jacket" in product.name %}
+
+                                    <span>🧥</span>
+
+                                {% elif "T-Shirt" in product.name %}
+
+                                    <span>👕</span>
+
+                                {% elif "Lamp" in product.name %}
+
+                                    <span>💡</span>
+
+                                {% elif "Bottle" in product.name %}
+
+                                    <span>🧴</span>
+
+                                {% elif "Organizer" in product.name %}
+
+                                    <span>🗂️</span>
+
+                                {% elif "Night Light" in product.name %}
+
+                                    <span>💡</span>
+
+                                {% elif "Coffee Maker" in product.name %}
+
+                                    <span>☕</span>
+
+                                {% else %}
+
+                                    <span>🛍️</span>
+
+                                {% endif %}
+
+                                <p>Product image</p>
+
+                            </div>
+
+                        {% endif %}
+
+                    </a>
+
+
+                    <!-- PRODUCT INFO -->
+                    <div class="product-info">
+
+                        {% if product.category %}
+
+                            <span class="product-category">
+                                {{ product.category.name }}
+                            </span>
+
+                        {% else %}
+
+                            <span class="product-category">
+                                Product
+                            </span>
+
+                        {% endif %}
+
+
+                        <h3>
+                            <a
+                                href="{% url 'product_detail' product.id %}"
+                            >
+                                {{ product.name }}
+                            </a>
+                        </h3>
+
+
+                        <p>
+                            {{ product.description|truncatewords:15 }}
+                        </p>
+
+
+                        <div class="product-price">
+                            ${{ product.price }}
+                        </div>
+
+
+                        {% if product.stock > 0 %}
+
+                            <div class="product-stock">
+                                ✓ {{ product.stock }} available
+                            </div>
+
+                        {% else %}
+
+                            <div class="product-stock out-of-stock">
+                                Out of stock
+                            </div>
+
+                        {% endif %}
+
+
+                        <!-- ACTIONS -->
+                        <div class="product-actions">
+
+                            <a
+                                href="{% url 'product_detail' product.id %}"
+                                class="btn btn-outline"
+                            >
+                                Details
+                            </a>
+
+
+                            {% if product.stock > 0 %}
+
+                                <a
+                                    href="{% url 'add_to_cart' product.id %}"
+                                    class="btn btn-primary"
+                                >
+                                    Add to Cart
+                                </a>
+
+                            {% else %}
+
+                                <button
+                                    type="button"
+                                    class="btn btn-outline"
+                                    disabled
+                                >
+                                    Sold Out
+                                </button>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+            {% empty %}
+
+                <!-- NO PRODUCTS -->
+                <div class="empty-products">
+
+                    <div class="empty-icon">
+                        🔍
+                    </div>
+
+                    <h2>No products found</h2>
+
+                    <p>
+                        We couldn't find any products matching your search.
+                    </p>
+
+                    <a
+                        href="{% url 'product_list' %}"
+                        class="btn btn-primary"
+                    >
+                        View All Products
+                    </a>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <div class="empty-products">
+
+            <div class="empty-icon">
+                🛍️
+            </div>
+
+            <h2>No products available</h2>
+
+            <p>
+                There are currently no products in this category.
+            </p>
+
+            <a
+                href="{% url 'product_list' %}"
+                class="btn btn-primary"
+            >
+                View All Products
+            </a>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

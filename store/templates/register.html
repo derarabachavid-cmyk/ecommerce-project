@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Create Account - E-Commerce{% endblock %}
+
+{% block content %}
+
+<div class="auth-page">
+
+    <div class="auth-card">
+
+        <div class="auth-icon">
+            👤
+        </div>
+
+        <h1>Create Account</h1>
+
+        <p class="auth-subtitle">
+            Join us and start shopping today.
+        </p>
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            {{ form.non_field_errors }}
+
+            {% for field in form %}
+
+                <div class="form-group">
+
+                    <label>
+                        {{ field.label }}
+                    </label>
+
+                    {{ field }}
+
+                    {% if field.help_text %}
+                        <small class="field-help">
+                            {{ field.help_text }}
+                        </small>
+                    {% endif %}
+
+                    {% if field.errors %}
+                        <div class="form-errors">
+                            {{ field.errors }}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+            {% endfor %}
+
+            <button
+                type="submit"
+                class="auth-submit"
+            >
+                Create Account
+            </button>
+
+        </form>
+
+        <p class="auth-bottom">
+            Already have an account?
+            <a href="{% url 'login' %}">
+                Login
+            </a>
+        </p>
+
+    </div>
+
+</div>
+
+{% endblock %}

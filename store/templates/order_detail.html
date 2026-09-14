@@ -1,0 +1,683 @@
+{% extends "base.html" %}
+
+{% block title %}Order #{{ order.id }} | E-Commerce{% endblock %}
+
+{% block content %}
+
+<style>
+
+/* ================================
+   ORDER DETAIL PAGE
+================================ */
+
+.order-detail-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 45px 25px 80px;
+}
+
+/* BREADCRUMB */
+
+.order-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 30px;
+    color: #64748b;
+    font-size: 14px;
+}
+
+.order-breadcrumb a {
+    color: #0878ee;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.order-breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+/* HEADER */
+
+.order-detail-header {
+    background: linear-gradient(
+        135deg,
+        #062b4f,
+        #0878ee
+    );
+
+    color: white;
+    border-radius: 24px;
+    padding: 38px;
+    margin-bottom: 25px;
+
+    box-shadow:
+        0 18px 40px rgba(6,43,79,.18);
+}
+
+.order-label {
+    color: #a9ddff;
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.order-detail-header h1 {
+    margin: 0;
+    font-size: 42px;
+    font-weight: 900;
+}
+
+.order-date {
+    margin-top: 10px;
+    color: #e1efff;
+    font-size: 16px;
+}
+
+/* STATUS */
+
+.order-status-row {
+    margin-top: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.status-label {
+    color: #dcecff;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    background: white;
+    color: #0878ee;
+
+    padding: 10px 18px;
+    border-radius: 30px;
+
+    font-weight: 900;
+}
+
+/* SECTION */
+
+.order-section {
+    margin-top: 30px;
+}
+
+.section-heading {
+    margin-bottom: 18px;
+}
+
+.section-heading h2 {
+    margin: 0;
+    color: #082f56;
+    font-size: 28px;
+    font-weight: 900;
+}
+
+.section-heading p {
+    margin: 6px 0 0;
+    color: #64748b;
+}
+
+/* ITEMS */
+
+.order-items {
+    display: grid;
+    gap: 18px;
+}
+
+.order-item {
+    display: grid;
+    grid-template-columns: 130px 1fr auto;
+
+    align-items: center;
+    gap: 22px;
+
+    background: white;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+
+    padding: 18px;
+
+    box-shadow:
+        0 8px 25px rgba(15,23,42,.06);
+
+    transition: .25s;
+}
+
+.order-item:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 15px 35px rgba(15,23,42,.11);
+}
+
+/* IMAGE */
+
+.order-product-image {
+    width: 130px;
+    height: 130px;
+
+    border-radius: 15px;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            135deg,
+            #eef6ff,
+            #dceeff
+        );
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.order-product-image img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+}
+
+.order-image-placeholder {
+    font-size: 48px;
+}
+
+/* PRODUCT INFO */
+
+.order-product-info h3 {
+    margin: 0 0 8px;
+
+    color: #082f56;
+
+    font-size: 21px;
+    font-weight: 900;
+}
+
+.order-product-info p {
+    margin: 5px 0;
+
+    color: #64748b;
+
+    font-size: 14px;
+}
+
+.order-category {
+    display: inline-block;
+
+    margin-bottom: 8px;
+
+    padding: 5px 10px;
+
+    border-radius: 20px;
+
+    background: #eef6ff;
+    color: #0878ee;
+
+    font-size: 12px;
+    font-weight: 800;
+}
+
+/* QUANTITY */
+
+.order-quantity {
+    margin-top: 10px;
+
+    color: #475569;
+
+    font-size: 14px;
+}
+
+.order-quantity strong {
+    color: #082f56;
+}
+
+/* PRICE */
+
+.order-item-price {
+    text-align: right;
+}
+
+.item-unit-price {
+    color: #64748b;
+    font-size: 13px;
+}
+
+.item-subtotal {
+    margin-top: 5px;
+
+    color: #0878ee;
+
+    font-size: 23px;
+    font-weight: 900;
+}
+
+/* SUMMARY */
+
+.order-summary {
+    margin-top: 25px;
+
+    background: white;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 20px;
+
+    padding: 25px;
+
+    box-shadow:
+        0 8px 25px rgba(15,23,42,.06);
+}
+
+.summary-row {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 12px 0;
+
+    color: #64748b;
+}
+
+.summary-total {
+    border-top: 1px solid #e2e8f0;
+
+    margin-top: 8px;
+    padding-top: 20px;
+
+    color: #082f56;
+
+    font-size: 25px;
+    font-weight: 900;
+}
+
+.summary-total strong {
+    color: #0878ee;
+}
+
+/* BUTTONS */
+
+.order-actions {
+    display: flex;
+
+    gap: 15px;
+
+    margin-top: 25px;
+
+    flex-wrap: wrap;
+}
+
+.back-orders-button,
+.continue-shopping-button {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 13px 22px;
+
+    border-radius: 10px;
+
+    text-decoration: none;
+
+    font-weight: 800;
+
+    transition: .2s;
+}
+
+.back-orders-button {
+    background: #0878ee;
+    color: white;
+}
+
+.back-orders-button:hover {
+    background: #0564c9;
+    transform: translateY(-2px);
+}
+
+.continue-shopping-button {
+    background: white;
+
+    color: #0878ee;
+
+    border: 2px solid #0878ee;
+}
+
+.continue-shopping-button:hover {
+    background: #eef6ff;
+}
+
+/* SECURITY */
+
+.order-security {
+    margin-top: 25px;
+
+    padding: 18px;
+
+    border-radius: 15px;
+
+    background: #f0fdf4;
+
+    border: 1px solid #bbf7d0;
+
+    color: #166534;
+
+    font-size: 14px;
+}
+
+/* MOBILE */
+
+@media (max-width: 750px) {
+
+    .order-detail-page {
+        padding: 25px 15px 60px;
+    }
+
+    .order-detail-header {
+        padding: 28px 22px;
+    }
+
+    .order-detail-header h1 {
+        font-size: 32px;
+    }
+
+    .order-item {
+        grid-template-columns: 90px 1fr;
+    }
+
+    .order-product-image {
+        width: 90px;
+        height: 90px;
+    }
+
+    .order-item-price {
+        grid-column: 2;
+        text-align: left;
+    }
+
+    .item-subtotal {
+        font-size: 20px;
+    }
+
+}
+
+</style>
+
+
+<div class="order-detail-page">
+
+    <!-- BREADCRUMB -->
+
+    <div class="order-breadcrumb">
+
+        <a href="{% url 'home' %}">
+            Home
+        </a>
+
+        <span>›</span>
+
+        <a href="{% url 'my_orders' %}">
+            My Orders
+        </a>
+
+        <span>›</span>
+
+        <strong>
+            Order #{{ order.id }}
+        </strong>
+
+    </div>
+
+
+    <!-- ORDER HEADER -->
+
+    <section class="order-detail-header">
+
+        <div class="order-label">
+            Order Details
+        </div>
+
+        <h1>
+            Order #{{ order.id }}
+        </h1>
+
+        <div class="order-date">
+            Placed on
+            {{ order.created_at|date:"F d, Y" }}
+            •
+            {{ order.created_at|date:"H:i" }}
+        </div>
+
+
+        <div class="order-status-row">
+
+            <div class="status-label">
+                Current order status
+            </div>
+
+            <div class="status-badge">
+
+                ●
+
+                {{ order.status }}
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ITEMS -->
+
+    <section class="order-section">
+
+        <div class="section-heading">
+
+            <h2>
+                Items in your order
+            </h2>
+
+            <p>
+                Review the products included in this order.
+            </p>
+
+        </div>
+
+
+        <div class="order-items">
+
+            {% for item in order.items.all %}
+
+                <article class="order-item">
+
+                    <!-- PRODUCT IMAGE -->
+
+                    <div class="order-product-image">
+
+                        {% if item.product and item.product.image %}
+
+                            <img
+                                src="{{ item.product.image.url }}"
+                                alt="{{ item.product.name }}"
+                            >
+
+                        {% else %}
+
+                            <div class="order-image-placeholder">
+                                🛍️
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- PRODUCT INFORMATION -->
+
+                    <div class="order-product-info">
+
+                        {% if item.product.category %}
+
+                            <span class="order-category">
+
+                                {{ item.product.category.name }}
+
+                            </span>
+
+                        {% endif %}
+
+
+                        <h3>
+
+                            {% if item.product %}
+
+                                {{ item.product.name }}
+
+                            {% else %}
+
+                                Product no longer available
+
+                            {% endif %}
+
+                        </h3>
+
+
+                        {% if item.product %}
+
+                            <p>
+                                {{ item.product.description|truncatewords:18 }}
+                            </p>
+
+                        {% endif %}
+
+
+                        <div class="order-quantity">
+
+                            Quantity:
+                            <strong>
+                                {{ item.quantity }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- PRICE -->
+
+                    <div class="order-item-price">
+
+                        <div class="item-unit-price">
+
+                            ${{ item.price }}
+                            each
+
+                        </div>
+
+                        <div class="item-subtotal">
+
+                            ${% widthratio item.price 1 item.quantity %}
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+            {% empty %}
+
+                <div class="order-summary">
+
+                    <strong>
+                        No items were found in this order.
+                    </strong>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+
+    <!-- TOTAL -->
+
+    <section class="order-summary">
+
+        <div class="summary-row">
+
+            <span>
+                Order status
+            </span>
+
+            <strong>
+                {{ order.status }}
+            </strong>
+
+        </div>
+
+
+        <div class="summary-row summary-total">
+
+            <span>
+                Total
+            </span>
+
+            <strong>
+                ${{ order.total_price }}
+            </strong>
+
+        </div>
+
+    </section>
+
+
+    <!-- ACTIONS -->
+
+    <div class="order-actions">
+
+        <a
+            href="{% url 'my_orders' %}"
+            class="back-orders-button"
+        >
+            ← Back to My Orders
+        </a>
+
+
+        <a
+            href="{% url 'product_list' %}"
+            class="continue-shopping-button"
+        >
+            Continue Shopping →
+        </a>
+
+    </div>
+
+
+    <!-- SECURITY -->
+
+    <div class="order-security">
+
+        🔒
+        Your order information is private and can only be viewed
+        from your account.
+
+    </div>
+
+</div>
+
+{% endblock %}

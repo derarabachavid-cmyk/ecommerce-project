@@ -1,0 +1,366 @@
+{% extends "base.html" %}
+
+{% block title %}My Orders | E-Commerce{% endblock %}
+
+{% block content %}
+
+<style>
+/* =========================
+   MY ORDERS PAGE
+========================= */
+
+.orders-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 45px 25px 80px;
+}
+
+/* HEADER */
+.orders-header {
+    background: linear-gradient(135deg, #062b4f, #0878ee);
+    color: white;
+    border-radius: 24px;
+    padding: 40px;
+    margin-bottom: 30px;
+    box-shadow: 0 15px 40px rgba(6,43,79,.16);
+}
+
+.orders-label {
+    color: #9bd7ff;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.orders-header h1 {
+    margin: 0;
+    font-size: 40px;
+    font-weight: 900;
+}
+
+.orders-header p {
+    margin: 10px 0 0;
+    color: #e5f2ff;
+    font-size: 17px;
+}
+
+/* ORDER LIST */
+.orders-list {
+    display: grid;
+    gap: 20px;
+}
+
+/* ORDER CARD */
+.order-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 8px 25px rgba(15,23,42,.07);
+    transition: .25s;
+}
+
+.order-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 35px rgba(15,23,42,.12);
+}
+
+/* TOP */
+.order-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #edf2f7;
+}
+
+.order-number {
+    color: #082f56;
+    font-size: 22px;
+    font-weight: 900;
+}
+
+.order-date {
+    margin-top: 6px;
+    color: #64748b;
+    font-size: 14px;
+}
+
+/* STATUS */
+.status {
+    padding: 8px 15px;
+    border-radius: 30px;
+    background: #fff7ed;
+    color: #c2410c;
+    font-size: 13px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+/* BODY */
+.order-body {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 25px;
+    padding-top: 22px;
+}
+
+.order-info {
+    display: flex;
+    gap: 45px;
+    flex-wrap: wrap;
+}
+
+.info-item span {
+    display: block;
+    color: #64748b;
+    font-size: 13px;
+    margin-bottom: 5px;
+}
+
+.info-item strong {
+    color: #082f56;
+    font-size: 20px;
+}
+
+/* BUTTON */
+.order-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 20px;
+    background: #0878ee;
+    color: white;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 800;
+    transition: .2s;
+}
+
+.order-button:hover {
+    background: #0564c9;
+    transform: translateY(-2px);
+}
+
+/* EMPTY */
+.empty-orders {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 22px;
+    padding: 70px 25px;
+    text-align: center;
+    box-shadow: 0 8px 25px rgba(15,23,42,.06);
+}
+
+.empty-icon {
+    font-size: 70px;
+    margin-bottom: 15px;
+}
+
+.empty-orders h2 {
+    color: #082f56;
+    margin: 0 0 10px;
+}
+
+.empty-orders p {
+    color: #64748b;
+    margin-bottom: 25px;
+}
+
+.shop-button {
+    display: inline-block;
+    background: #0878ee;
+    color: white;
+    padding: 13px 24px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 800;
+}
+
+/* RESPONSIVE */
+@media (max-width: 700px) {
+
+    .orders-page {
+        padding: 25px 15px 50px;
+    }
+
+    .orders-header {
+        padding: 30px 22px;
+    }
+
+    .orders-header h1 {
+        font-size: 32px;
+    }
+
+    .order-top {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .order-body {
+        grid-template-columns: 1fr;
+    }
+
+    .order-button {
+        width: 100%;
+    }
+
+    .order-info {
+        gap: 25px;
+    }
+}
+</style>
+
+
+<div class="orders-page">
+
+    <!-- HEADER -->
+
+    <div class="orders-header">
+
+        <div class="orders-label">
+            Account
+        </div>
+
+        <h1>
+            My Orders
+        </h1>
+
+        <p>
+            View your previous purchases and track your order status.
+        </p>
+
+    </div>
+
+
+    {% if orders %}
+
+        <div class="orders-list">
+
+            {% for order in orders %}
+
+                <article class="order-card">
+
+                    <!-- ORDER TOP -->
+
+                    <div class="order-top">
+
+                        <div>
+
+                            <div class="order-number">
+                                🧾 Order #{{ order.id }}
+                            </div>
+
+                            <div class="order-date">
+                                Placed on {{ order.created_at|date:"M d, Y" }}
+                                •
+                                {{ order.created_at|date:"H:i" }}
+                            </div>
+
+                        </div>
+
+
+                        <div class="status">
+                            {{ order.status }}
+                        </div>
+
+                    </div>
+
+
+                    <!-- ORDER BODY -->
+
+                    <div class="order-body">
+
+                        <div class="order-info">
+
+                            <div class="info-item">
+
+                                <span>
+                                    Order total
+                                </span>
+
+                                <strong>
+                                    ${{ order.total_price }}
+                                </strong>
+
+                            </div>
+
+
+                            <div class="info-item">
+
+                                <span>
+                                    Order number
+                                </span>
+
+                                <strong>
+                                    #{{ order.id }}
+                                </strong>
+
+                            </div>
+
+
+                            <div class="info-item">
+
+                                <span>
+                                    Status
+                                </span>
+
+                                <strong>
+                                    {{ order.status }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <a href="{% url 'order_detail' order.id %}"
+                           class="order-button">
+
+                            View Details →
+
+                        </a>
+
+                    </div>
+
+                </article>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <div class="empty-orders">
+
+            <div class="empty-icon">
+                🛍️
+            </div>
+
+            <h2>
+                No orders yet
+            </h2>
+
+            <p>
+                You haven't placed an order yet.
+                Start shopping and your orders will appear here.
+            </p>
+
+            <a href="{% url 'product_list' %}"
+               class="shop-button">
+
+                Start Shopping →
+
+            </a>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

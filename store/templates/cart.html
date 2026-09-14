@@ -1,0 +1,209 @@
+{% extends "base.html" %}
+
+{% block title %}Shopping Cart - E-Commerce{% endblock %}
+
+{% block content %}
+
+<div class="cart-page">
+
+    <div class="cart-header">
+
+        <div>
+
+            <div class="breadcrumb">
+                <a href="{% url 'home' %}">Home</a>
+                /
+                Cart
+            </div>
+
+            <h1>Shopping Cart</h1>
+
+            <p>
+                Review your items before checkout.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    {% if items %}
+
+        <div class="cart-layout">
+
+
+            <!-- CART ITEMS -->
+
+            <div class="cart-items">
+
+                {% for item in items %}
+
+                    <div class="cart-item">
+
+
+                        <div class="cart-product-image">
+
+                            {% if item.product.image %}
+
+                                <img
+                                    src="{{ item.product.image.url }}"
+                                    alt="{{ item.product.name }}"
+                                >
+
+                            {% else %}
+
+                                <span>
+                                    🛍️
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <div class="cart-product-info">
+
+                            <h3>
+                                {{ item.product.name }}
+                            </h3>
+
+                            <p>
+                                {{ item.product.description|truncatewords:12 }}
+                            </p>
+
+                            <strong>
+                                ${{ item.product.price }}
+                            </strong>
+
+                        </div>
+
+
+                        <form
+                            method="POST"
+                            action="{% url 'update_cart' item.product.id %}"
+                            class="quantity-form"
+                        >
+
+                            {% csrf_token %}
+
+                            <label>
+                                Quantity
+                            </label>
+
+                            <input
+                                type="number"
+                                name="quantity"
+                                value="{{ item.quantity }}"
+                                min="1"
+                                max="{{ item.product.stock }}"
+                            >
+
+                            <button type="submit">
+                                Update
+                            </button>
+
+                        </form>
+
+
+                        <div class="cart-item-total">
+
+                            ${{ item.subtotal }}
+
+                            <a
+                                href="{% url 'remove_from_cart' item.product.id %}"
+                            >
+                                Remove
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+
+            <!-- SUMMARY -->
+
+            <aside class="cart-summary">
+
+                <h2>
+                    Order Summary
+                </h2>
+
+                <div class="summary-row">
+
+                    <span>
+                        Items
+                    </span>
+
+                    <span>
+                        {{ cart_count }}
+                    </span>
+
+                </div>
+
+                <div class="summary-row total">
+
+                    <span>
+                        Total
+                    </span>
+
+                    <strong>
+                        ${{ total }}
+                    </strong>
+
+                </div>
+
+
+                <a
+                    href="{% url 'checkout' %}"
+                    class="checkout-button"
+                >
+                    Proceed to Checkout
+                </a>
+
+
+                <a
+                    href="{% url 'product_list' %}"
+                    class="continue-shopping"
+                >
+                    ← Continue Shopping
+                </a>
+
+            </aside>
+
+        </div>
+
+
+    {% else %}
+
+        <div class="empty-cart">
+
+            <div>
+                🛒
+            </div>
+
+            <h2>
+                Your Cart Is Empty
+            </h2>
+
+            <p>
+                Add some products and come back here.
+            </p>
+
+            <a
+                href="{% url 'product_list' %}"
+                class="checkout-button"
+            >
+                Start Shopping
+            </a>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

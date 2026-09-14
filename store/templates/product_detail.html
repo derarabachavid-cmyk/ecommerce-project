@@ -1,0 +1,243 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{ product.name }} | E-Commerce
+{% endblock %}
+
+{% block content %}
+
+<div class="product-detail-page">
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+        <a href="{% url 'home' %}">Home</a>
+        <span>›</span>
+
+        {% if product.category %}
+            <a href="{% url 'category_products' product.category.id %}">
+                {{ product.category.name }}
+            </a>
+            <span>›</span>
+        {% endif %}
+
+        <span>{{ product.name }}</span>
+    </div>
+
+
+    <!-- Product Main Section -->
+    <section class="product-detail">
+
+        <!-- Product Image -->
+        <div class="product-detail-image">
+
+    {% if product.image %}
+
+    <img
+        src="{{ product.image.url }}"
+        alt="{{ product.name }}"
+    >
+
+{% else %}
+
+    <div class="product-image-placeholder">
+
+        {% if product.category.name == "Electronics" %}
+            <span>🎧</span>
+
+        {% elif product.category.name == "Fashion" %}
+            <span>👕</span>
+
+        {% elif product.category.name == "Home" %}
+            <span>🏠</span>
+
+        {% elif product.category.name == "Accessories" %}
+            <span>👜</span>
+
+        {% else %}
+            <span>🛍️</span>
+        {% endif %}
+
+        <p>Product image</p>
+
+    </div>
+
+{% endif %}
+        </div>
+
+
+        <!-- Product Information -->
+        <div class="product-detail-info">
+
+            {% if product.category %}
+                <a
+                    href="{% url 'category_products' product.category.id %}"
+                    class="product-category"
+                >
+                    {{ product.category.name }}
+                </a>
+            {% endif %}
+
+
+            <h1>{{ product.name }}</h1>
+
+
+            <div class="product-detail-price">
+                ${{ product.price }}
+            </div>
+
+
+            <p class="product-detail-description">
+                {{ product.description }}
+            </p>
+
+
+            <!-- Stock -->
+            <div class="stock-status">
+
+                {% if product.stock > 0 %}
+                    <span class="stock-check">✓</span>
+                    <span>{{ product.stock }} available</span>
+                {% else %}
+                    <span class="out-stock">✕</span>
+                    <span>Out of stock</span>
+                {% endif %}
+
+            </div>
+
+
+            <!-- Add To Cart -->
+            {% if product.stock > 0 %}
+
+                <a
+                    href="{% url 'add_to_cart' product.id %}"
+                    class="add-cart-detail"
+                >
+                    🛒 Add to Cart
+                </a>
+
+            {% else %}
+
+                <button
+                    class="add-cart-detail disabled"
+                    disabled
+                >
+                    Out of Stock
+                </button>
+
+            {% endif %}
+
+
+            <!-- Benefits -->
+            <div class="product-benefits">
+
+                <div>
+                    <span>✓</span>
+                    <p>Quality product</p>
+                </div>
+
+                <div>
+                    <span>✓</span>
+                    <p>Secure shopping</p>
+                </div>
+
+                <div>
+                    <span>✓</span>
+                    <p>Easy checkout</p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Related Products -->
+    {% if related_products %}
+
+    <section class="related-section">
+
+        <p class="related-label">
+            YOU MAY ALSO LIKE
+        </p>
+
+        <h2>
+            Related Products
+        </h2>
+
+
+        <div class="related-grid">
+
+            {% for related in related_products %}
+
+            <article class="related-card">
+
+                <a href="{% url 'product_detail' related.id %}">
+
+                    <div class="related-image">
+
+                        {% if related.image %}
+                            <img
+                                src="{{ related.image.url }}"
+                                alt="{{ related.name }}"
+                            >
+                        {% else %}
+                            <div class="related-placeholder">
+
+                                {% if related.category.name == "Electronics" %}
+                                    🎧
+                                {% elif related.category.name == "Fashion" %}
+                                    👕
+                                {% elif related.category.name == "Home" %}
+                                    🏠
+                                {% else %}
+                                    🛍️
+                                {% endif %}
+
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+                </a>
+
+
+                <div class="related-content">
+
+                    {% if related.category %}
+                        <div class="related-category">
+                            {{ related.category.name }}
+                        </div>
+                    {% endif %}
+
+                    <h3>
+                        {{ related.name }}
+                    </h3>
+
+                    <div class="related-bottom">
+
+                        <strong>
+                            ${{ related.price }}
+                        </strong>
+
+                        <a href="{% url 'product_detail' related.id %}">
+                            View →
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}
