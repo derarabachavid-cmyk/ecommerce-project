@@ -1,14 +1,15 @@
 {% extends "base.html" %}
 
 {% block title %}
-Checkout
+Checkout | E-Commerce
 {% endblock %}
 
 {% block content %}
 
 <div class="checkout-page">
 
-    <div class="breadcrumb">
+    <!-- BREADCRUMB -->
+    <div class="checkout-breadcrumb">
         <a href="{% url 'home' %}">Home</a>
         <span>›</span>
         <a href="{% url 'cart' %}">Cart</a>
@@ -17,16 +18,17 @@ Checkout
     </div>
 
 
+    <!-- HEADER -->
     <div class="checkout-header">
-
-        <span>SECURE CHECKOUT</span>
+        <div class="checkout-label">
+            🔒 SECURE CHECKOUT
+        </div>
 
         <h1>Complete Your Order</h1>
 
         <p>
-            Enter your delivery information before placing your order.
+            Enter your delivery information and review your order before placing it.
         </p>
-
     </div>
 
 
@@ -34,31 +36,36 @@ Checkout
 
         {% csrf_token %}
 
-
         <div class="checkout-layout">
 
 
-            <!-- DELIVERY INFORMATION -->
+            <!-- ==========================================
+                 DELIVERY INFORMATION
+                 ========================================== -->
 
-            <div class="checkout-card">
+            <div class="checkout-card delivery-card">
 
-                <div class="checkout-card-header">
+                <div class="checkout-card-title">
 
-                    <h2>Delivery Information</h2>
+                    <div class="checkout-title-icon">
+                        📍
+                    </div>
 
-                    <p>
-                        Your order will be delivered to this address.
-                    </p>
+                    <div>
+                        <h2>Delivery Information</h2>
+
+                        <p>
+                            Where should we deliver your order?
+                        </p>
+                    </div>
 
                 </div>
 
 
                 {% if form.non_field_errors %}
-
-                    <div class="form-errors">
+                    <div class="checkout-error">
                         {{ form.non_field_errors }}
                     </div>
-
                 {% endif %}
 
 
@@ -73,11 +80,9 @@ Checkout
                     {{ form.full_name }}
 
                     {% if form.full_name.errors %}
-
                         <div class="field-error">
                             {{ form.full_name.errors }}
                         </div>
-
                     {% endif %}
 
                 </div>
@@ -94,37 +99,34 @@ Checkout
                     {{ form.email }}
 
                     {% if form.email.errors %}
-
                         <div class="field-error">
                             {{ form.email.errors }}
                         </div>
-
                     {% endif %}
 
                 </div>
 
 
-                <!-- ADDRESS / PLACE -->
+                <!-- ADDRESS -->
 
                 <div class="checkout-field">
 
                     <label for="{{ form.address.id_for_label }}">
-                        Delivery Address / Place *
+                        Delivery Address / Place
+                        <span>*</span>
                     </label>
 
                     {{ form.address }}
 
-                    {% if form.address.errors %}
+                    <small>
+                        📦 Enter the place where you want your order delivered.
+                    </small>
 
+                    {% if form.address.errors %}
                         <div class="field-error">
                             {{ form.address.errors }}
                         </div>
-
                     {% endif %}
-
-                    <small>
-                        Enter the place where you want your order delivered.
-                    </small>
 
                 </div>
 
@@ -134,105 +136,145 @@ Checkout
                 <div class="checkout-field">
 
                     <label for="{{ form.city.id_for_label }}">
-                        City *
+                        City
+                        <span>*</span>
                     </label>
 
                     {{ form.city }}
 
                     {% if form.city.errors %}
-
                         <div class="field-error">
                             {{ form.city.errors }}
                         </div>
-
                     {% endif %}
 
                 </div>
 
 
                 <div class="required-message">
-                    * Delivery address and city are required.
+                    <span>✓</span>
+                    Delivery address and city are required.
                 </div>
 
             </div>
 
 
-            <!-- ORDER SUMMARY -->
+            <!-- ==========================================
+                 ORDER SUMMARY
+                 ========================================== -->
 
             <div class="checkout-card order-summary">
 
-                <div class="checkout-card-header">
+                <div class="checkout-card-title">
 
-                    <h2>Your Order</h2>
+                    <div class="checkout-title-icon">
+                        🛒
+                    </div>
 
-                    <p>
-                        {{ cart_count }} item{{ cart_count|pluralize }}
-                    </p>
+                    <div>
+                        <h2>Your Order</h2>
+
+                        <p>
+                            {{ cart_count }}
+                            item{{ cart_count|pluralize }}
+                        </p>
+                    </div>
 
                 </div>
 
 
-                {% for item in items %}
+                <!-- PRODUCTS -->
 
-                <div class="checkout-product">
+                <div class="checkout-products">
 
-                    <div class="checkout-product-image">
+                    {% for item in items %}
 
-                        {% if item.product.image %}
+                    <div class="checkout-product">
 
-                            <img
-                                src="{{ item.product.image.url }}"
-                                alt="{{ item.product.name }}"
-                            >
+                        <div class="checkout-product-image">
 
-                        {% else %}
+                            {% if item.product.image %}
 
-                            <span>📦</span>
+                                <img
+                                    src="{{ item.product.image.url }}"
+                                    alt="{{ item.product.name }}"
+                                >
 
-                        {% endif %}
+                            {% else %}
+
+                                <span>📦</span>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <div class="checkout-product-info">
+
+                            <strong>
+                                {{ item.product.name }}
+                            </strong>
+
+                            <span>
+                                Quantity: {{ item.quantity }}
+                            </span>
+
+                            <small>
+                                ${{ item.product.price }} each
+                            </small>
+
+                        </div>
+
+
+                        <div class="checkout-product-price">
+                            ${{ item.subtotal }}
+                        </div>
 
                     </div>
 
-
-                    <div class="checkout-product-info">
-
-                        <strong>
-                            {{ item.product.name }}
-                        </strong>
-
-                        <span>
-                            Qty: {{ item.quantity }}
-                        </span>
-
-                    </div>
-
-
-                    <strong>
-                        ${{ item.subtotal }}
-                    </strong>
+                    {% endfor %}
 
                 </div>
 
-                {% endfor %}
 
+                <!-- TOTAL -->
 
                 <div class="checkout-total">
 
-                    <span>Total</span>
+                    <div>
+                        <span>Subtotal</span>
+                        <strong>${{ total }}</strong>
+                    </div>
 
-                    <strong>
-                        ${{ total }}
-                    </strong>
+                    <div>
+                        <span>Delivery</span>
+                        <strong class="free-delivery">
+                            FREE
+                        </strong>
+                    </div>
+
+                    <div class="checkout-grand-total">
+                        <span>Total</span>
+                        <strong>${{ total }}</strong>
+                    </div>
 
                 </div>
 
 
+                <!-- PLACE ORDER -->
+
                 <button
                     type="submit"
-                    class="btn btn-primary checkout-button"
+                    class="checkout-button"
                 >
-                    Place Order
+                    <span>Place Order</span>
+                    <span>→</span>
                 </button>
+
+
+                <div class="checkout-security">
+                    🔒 Your information is secure
+                </div>
 
 
                 <a
@@ -247,6 +289,37 @@ Checkout
         </div>
 
     </form>
+
+
+    <!-- TRUST FEATURES -->
+
+    <div class="checkout-features">
+
+        <div class="checkout-feature">
+            <span>🔒</span>
+            <div>
+                <strong>Secure Checkout</strong>
+                <small>Your information is protected</small>
+            </div>
+        </div>
+
+        <div class="checkout-feature">
+            <span>🚚</span>
+            <div>
+                <strong>Reliable Delivery</strong>
+                <small>Delivered to your selected place</small>
+            </div>
+        </div>
+
+        <div class="checkout-feature">
+            <span>✓</span>
+            <div>
+                <strong>Easy Ordering</strong>
+                <small>Simple and convenient process</small>
+            </div>
+        </div>
+
+    </div>
 
 </div>
 
