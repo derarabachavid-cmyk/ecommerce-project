@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
 from django.core.exceptions import ValidationError
+import re
 
 
 class RegisterForm(forms.Form):
@@ -68,6 +69,47 @@ class RegisterForm(forms.Form):
 
         return email
 
+    def clean_password(self):
+        password = self.cleaned_data.get("password")
+
+        if not password:
+            raise ValidationError(
+                "Password is required."
+            )
+
+        # Minimum 8 characters
+        if len(password) < 8:
+            raise ValidationError(
+                "Password must be at least 8 characters long."
+            )
+
+        # At least one uppercase letter
+        if not re.search(r"[A-Z]", password):
+            raise ValidationError(
+                "Password must contain at least one uppercase letter."
+            )
+
+        # At least one lowercase letter
+        if not re.search(r"[a-z]", password):
+            raise ValidationError(
+                "Password must contain at least one lowercase letter."
+            )
+
+        # At least one number
+        if not re.search(r"[0-9]", password):
+            raise ValidationError(
+                "Password must contain at least one number."
+            )
+
+        # At least one special character
+        if not re.search(r"[^A-Za-z0-9]", password):
+            raise ValidationError(
+                "Password must contain at least one special character "
+                "such as ! @ # $ %."
+            )
+
+        return password
+
     def clean(self):
         cleaned_data = super().clean()
 
@@ -85,8 +127,6 @@ class RegisterForm(forms.Form):
     def save(self):
         """
         Create and return a Django User.
-        This fixes:
-        'RegisterForm' object has no attribute 'save'
         """
 
         user = User.objects.create_user(
