@@ -6,17 +6,32 @@ import dj_database_url
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# ============================================================
-# SECURITY
-# ============================================================
+# =========================
+# PRODUCTION SECURITY
+# =========================
 
-SECRET_KEY = os.environ.get(
-    "SECRET_KEY",
-    "django-insecure-local-development-key"
-)
+DEBUG = False
 
-DEBUG = True
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
+ALLOWED_HOSTS = [
+    "ecommerce-backend-dzqr.onrender.com",
+]
+
+# HTTPS
+SECURE_SSL_REDIRECT = True
+
+# HSTS
+SECURE_HSTS_SECONDS = 31536000
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+
+# Secure cookies
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+# Additional security
+SECURE_CONTENT_TYPE_NOSNIFF = True
 # ============================================================
 # ALLOWED HOSTS
 # ============================================================
