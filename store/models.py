@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from cloudinary.models import CloudinaryField
 
 
 class Category(models.Model):
@@ -33,8 +34,8 @@ class Product(models.Model):
         default=0
     )
 
-    image = models.ImageField(
-        upload_to="products/",
+    image = CloudinaryField(
+        "image",
         blank=True,
         null=True
     )
@@ -71,7 +72,6 @@ class Order(models.Model):
         related_name="orders"
     )
 
-    # Delivery information
     full_name = models.CharField(
         max_length=150,
         blank=True,

@@ -2,39 +2,16 @@ from pathlib import Path
 import os
 import dj_database_url
 
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# =========================
+# ============================================================
 # PRODUCTION SECURITY
-# =========================
+# ============================================================
 
 DEBUG = False
 
 SECRET_KEY = os.environ.get("SECRET_KEY")
-
-ALLOWED_HOSTS = [
-    "ecommerce-backend-dzqr.onrender.com",
-]
-
-# HTTPS
-SECURE_SSL_REDIRECT = True
-
-# HSTS
-SECURE_HSTS_SECONDS = 31536000
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
-
-# Secure cookies
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-
-# Additional security
-SECURE_CONTENT_TYPE_NOSNIFF = True
-# ============================================================
-# ALLOWED HOSTS
-# ============================================================
 
 ALLOWED_HOSTS = [
     "127.0.0.1",
@@ -55,6 +32,21 @@ if extra_hosts:
         if host.strip()
     )
 
+# HTTPS
+SECURE_SSL_REDIRECT = True
+
+# HSTS
+SECURE_HSTS_SECONDS = 31536000
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+
+# Secure cookies
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+# Additional security
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
 
 # ============================================================
 # APPLICATIONS
@@ -72,7 +64,10 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     "corsheaders",
 
-   "store",
+    "cloudinary",
+    "cloudinary_storage",
+
+    "store",
 ]
 
 
@@ -166,6 +161,9 @@ AUTH_PASSWORD_VALIDATORS = [
             "django.contrib.auth.password_validation."
             "MinimumLengthValidator"
         ),
+        "OPTIONS": {
+            "min_length": 8,
+        },
     },
     {
         "NAME": (
@@ -202,23 +200,35 @@ STATIC_URL = "/static/"
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+
 
 # ============================================================
 # MEDIA FILES
 # ============================================================
 
 MEDIA_URL = "/media/"
-
 MEDIA_ROOT = BASE_DIR / "media"
 
 
 # ============================================================
-# STORAGE
+# CLOUDINARY STORAGE
 # ============================================================
+# Credentials are supplied through environment variables:
+#
+# CLOUDINARY_CLOUD_NAME
+# CLOUDINARY_API_KEY
+# CLOUDINARY_API_SECRET
+#
+# Do NOT put the actual credentials in this file.
 
 STORAGES = {
     "default": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
+        "BACKEND": (
+            "cloudinary_storage.storage.MediaCloudinaryStorage"
+        ),
     },
     "staticfiles": {
         "BACKEND": (
@@ -263,41 +273,4 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 CSRF_TRUSTED_ORIGINS = [
     "https://*.onrender.com",
-]
-# =========================================================
-# STATIC FILES
-# =========================================================
-
-STATIC_URL = "/static/"
-
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
-]
-
-# =========================================================
-# MEDIA FILES
-# =========================================================
-
-MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR / "media"
-# ============================================================
-# PASSWORD SECURITY
-# ============================================================
-
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
-        "OPTIONS": {
-            "min_length": 8,
-        },
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
-    },
 ]
